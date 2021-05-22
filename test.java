@@ -40,7 +40,7 @@ class Main
 	private static void snapshot()
 	{
 		Counter<String>c=new Counter<String>(Main.strings);
-		Iterator ci=c.orderedSnapshot(Counter.FREQUENT_FIRST);
+		Iterator ci=c.orderedSnapshot(false);
 		while(ci.hasNext())
 			System.out.println(ci.next());
 	}

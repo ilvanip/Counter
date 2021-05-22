@@ -98,7 +98,7 @@ public class Counter<I>
 
 	//Overload for counter.
 	//The new counter must count the same item type as that of the current one.
-	public void add(Counter<I> counter)
+	public void add(Counter<I>counter)
 	{
 		this.add(counter.map);
 	}
@@ -137,7 +137,7 @@ public class Counter<I>
 
 	//Overload for counter.
 	//The new counter must count the same item type as that of the current one.
-	public void subtract(Counter<I> counter)
+	public void subtract(Counter<I>counter)
 	{
 		this.subtract(counter.map);
 	}
@@ -167,37 +167,21 @@ public class Counter<I>
 		this.map.clear();
 	}
 
-	/*
-	Constants defining the order of the items in the snapshot.
-	*/
-	//Frequent items first.
-	public static final byte FREQUENT_FIRST=0;
-
-	//Frequent items last.
-	public static final byte FREQUENT_LAST=1;
-
 	//This is an iterator that iterates over the counter items
 	//	in the order of frequency.
 	//If 'frequent_first' is true, then the most frequent items will appear first.
 	//Otherwise, they will appear last.
-	public CounterIterator<I> orderedSnapshot(byte type)
+	public CounterIterator<I>orderedSnapshot(boolean frequent_first)
 	{
-		//Arrange in descending order.
-		//The comparator has to be reversed.
-		if(type==Counter.FREQUENT_FIRST)
-			return new CounterIterator<I>(this,this.comp.reversed());
-		//Arrange in ascending order.
-		if(type==Counter.FREQUENT_LAST)
-			return new CounterIterator<I>(this,this.comp);
-		//Default case.
-		throw new IllegalArgumentException(
-			"Type must be either 'Counter.FREQUENT_FIRST' or 'Counter.FREQUENT_LAST'"
-		);
+		//If the frequent items must come first, the iterator must be in descending order.
+		//So reverse the comparator.
+		//Otherwise, use it as is.
+		return new CounterIterator<I>(this,frequent_first?this.comp.reversed():this.comp);
 	}
 
 	//Counter intersection is defined as the minimum of corresponding counts.
 	//Minima lesser than or equal to 0 are dropped.
-	public Counter<I> intersection(Counter<I>other)
+	public Counter<I>intersection(Counter<I>other)
 	{
 		//Create a new counter
 		Counter<I>counter=new Counter<I>();
@@ -213,7 +197,7 @@ public class Counter<I>
 
 	//Counter union is defined as the maximum of corresponding counts.
 	//Maxima lesser than or equal to 0 are dropped.
-	public Counter<I> union(Counter<I>other)
+	public Counter<I>union(Counter<I>other)
 	{
 		//Get all the items in a set first.
 		Set<I>items=this.map.keySet();
@@ -231,7 +215,7 @@ public class Counter<I>
 	}
 
 	//Return the contents of the counter as a map.
-	public HashMap<I,Integer> toMap()
+	public HashMap<I,Integer>toMap()
 	{
 		return new HashMap<I,Integer>(this.map);
 	}
@@ -275,7 +259,7 @@ class CounterIterator<I>implements Iterator<Entry<I,Integer>>
 	}
 
 	//The next entry.
-	public Entry<I,Integer> next()
+	public Entry<I,Integer>next()
 	{
 		return this.pq.remove();
 	}
@@ -300,7 +284,7 @@ class CounterIterator<I>implements Iterator<Entry<I,Integer>>
 //More frequent items are greater than less frequent items.
 class ItemCountComparator<I> implements Comparator<Entry<I,Integer>>
 {
-	public int compare(Entry<I,Integer> e1,Entry<I,Integer> e2)
+	public int compare(Entry<I,Integer>e1,Entry<I,Integer>e2)
 	{
 		if(e1.getValue()>e2.getValue())
 			return 1;
