@@ -3,7 +3,7 @@
 
 package ilvanip;
 
-import java.util.Set;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 //Java Set union and intersection:
 //	https://stackoverflow.com/questions/51113134/union-or-intersection-of-java-sets
+//	https://stackoverflow.com/questions/19950771/java-lang-unsupportedoperationexception-when-combining-two-sets
 
 //Counter to count items of type I
 public class Counter<I>
@@ -200,7 +201,7 @@ public class Counter<I>
 	public Counter<I>union(Counter<I>other)
 	{
 		//Get all the items in a set first.
-		Set<I>items=this.map.keySet();
+		HashSet<I>items=new HashSet<I>(this.map.keySet());
 		items.addAll(other.map.keySet());
 		//Create a new counter
 		Counter<I>counter=new Counter<I>();
